@@ -24,6 +24,7 @@ public class ClassificationDemo {
 	private J48 tree;
 
 	public ClassificationDemo(String arrf) throws Exception {
+		//DataSource -> instantiate using WEKA api
 		DataSource source = new DataSource(arrf);
 		data = source.getDataSet();
 		System.out.println(data.numInstances() + " instances loaded!");
@@ -31,7 +32,14 @@ public class ClassificationDemo {
 	}
 
 	public void removeFirstAttribute() throws Exception {
+		/*
+		 * @attribute animal 
+		 * {aardvark,antelope,bass,bear,boar,buffalo,calf,carp,catfish
+		 * ,cavy,cheetah,chicken,chub,clam,crab,crayfish,crow,deer,dogfish,
+		 * dolphin,dove,duck,elephant,flamingo,flea,frog,fruitbat,giraffe,girl...
+		 */
 		Remove remove = new Remove();
+		// remove the first attributes with the instance of String array
 		String[] opts = new String[] { "-R", "1" };
 		remove.setOptions(opts);
 		remove.setInputFormat(data);
@@ -67,7 +75,13 @@ public class ClassificationDemo {
 		frame.setVisible(true);
 		tv.fitToScreen();
 	}
-
+/**
+ * Now we have an attribute about that animal,
+ * we would like to know what animal is this.
+ * It is our classification
+ * (Try to put some attributes that represents something).
+ * @throws Exception
+ */
 	public void classifyData() throws Exception {
 		double[] vals = new double[data.numAttributes()];
 		vals[0] = 1.0;	//hair {false, true}
@@ -102,13 +116,37 @@ public class ClassificationDemo {
 	}
 
 	public static void main(String[] args) {
+		/** weka.removeFirstAttribute() -> in our examples, we don't need to use all the attributes
+		 * need to remove these attributes about our datasets.
+		 * 
+		 */
 		try {
+			//instantiate ClassificationDemo to load the dataset. (constructor)
 			ClassificationDemo weka = new ClassificationDemo("zoo.arff");
-//			weka.removeFirstAttribute();
-//			weka.selectFeatures();
-//			weka.buildDecisionTree();
-//			weka.visualizeTree();
-//			weka.classifyData();
+			
+			// remove the first attribute.
+			weka.removeFirstAttribute();
+			
+			// what features is the best that describe our classifications?
+			// select attributes that have the important features that i need to understand/explain.
+			// ans: 12,3,7,2,0,1,8,9,13,4,11,5,15,10,6,14,16
+			weka.selectFeatures();
+			
+			// after feature selection, we will build the decision tree using J48 algorithm.
+			weka.buildDecisionTree();
+			
+			// visualize the tree using Java GUI
+			weka.visualizeTree();
+			
+			// we have datasets that used to build classification (decision) tree,
+			// and we have attribute about that animal
+			// what if we want to know what animal is this?
+			weka.classifyData();
+			
+			// identify the confusion matrix - important KPI
+			// 1. correctly classified instances
+			// 2. incorrectly classified instances
+			// 3. confusion matrix
 			weka.showErrorMetrics();
 		} catch (Exception e) {
 			e.printStackTrace();

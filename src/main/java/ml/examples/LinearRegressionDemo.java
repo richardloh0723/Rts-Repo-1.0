@@ -16,6 +16,7 @@ public class LinearRegressionDemo {
 	private Instances data;
 
 	public LinearRegressionDemo(String csv) throws IOException {
+		// CSV file: use CSV loader
 		CSVLoader csvLoader = new CSVLoader();
 		csvLoader.setSource(new File(csv));
 		data = csvLoader.getDataSet();

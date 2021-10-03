@@ -9,7 +9,12 @@ import java.util.Random;
 import weka.clusterers.ClusterEvaluation;
 import weka.clusterers.EM;
 import weka.core.Instances;
-
+/**
+ * The goal of this algorithm is to cluster different customers
+ * , group them into different groupings.
+ * @author Richard Loh
+ *
+ */
 public class ClusteringDemo {
 
 	private Instances data;
